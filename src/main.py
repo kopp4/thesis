@@ -10,6 +10,10 @@ import cv2
 import process
 import os
 import random
+import pathlib
+
+temp = pathlib.PosixPath
+pathlib.PosixPath = pathlib.WindowsPath
 
 class ImageProcessorApp(QMainWindow):
     def __init__(self):
