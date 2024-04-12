@@ -1,4 +1,6 @@
 
+cd src
+
 pipenv install
 
-pipenv run src/main.py
+pipenv run python main.py
