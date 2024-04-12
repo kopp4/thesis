@@ -8,6 +8,7 @@ pyqt5 = "*"
 opencv-python-headless = "*"
 torch = "*"
 pillow = "*"
+requests = "*"
 
 [dev-packages]
 
