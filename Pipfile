@@ -9,6 +9,7 @@ opencv-python-headless = "*"
 torch = "*"
 pillow = "*"
 requests = "*"
+ultralytics = "*"
 
 [dev-packages]
 
