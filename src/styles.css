@@ -1,0 +1,37 @@
+/* Style for QPushButton */
+/* background-color: lightgreen; */
+
+QPushButton {
+    background-color: #4CAF50; /* Green background color */
+    color: white; /* White text color */
+    border: 2px solid #4CAF50; /* Green border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px; /* Padding around the text */
+}
+QPushButton#evilButton:pressed {
+    background-color: rgb(224, 0, 0);
+    border-style: inset;
+}
+/* Style for QLabel */
+QLabel {
+    font-size: 16px; /* Font size 16 pixels */
+    color: blue; /* Blue text color */
+}
+
+/* Custom style for specific widgets using object names */
+QWidget#main_widget {
+    background-color: lightgray; /* Light gray background color for main_widget */
+}
+
+/* Style for QLineEdit with specific properties */
+QLineEdit {
+    background-color: yellow; /* Yellow background color for all QLineEdit widgets */
+}
+
+/* Custom style for QFrame with specific margins and colors */
+/* QFrame { */
+/*     border: 1px solid; */
+/*     border-color: red; */
+/*     background-color: white; */
+/* } */
+

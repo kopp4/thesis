@@ -1,0 +1,5 @@
+- [x] result shown in opencv or pyqt or embed and how
+- [ ] yolo code formatting
+- [ ] Windows compatibility
+- [ ] choose random images from CUB
+- [ ] camera embed
