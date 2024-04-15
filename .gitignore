@@ -5,3 +5,5 @@ share
 src/__pycache__
 lib64
 pyvenv.cfg
+exp
+src/images
