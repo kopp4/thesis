@@ -5,8 +5,8 @@ import cv2
 import time
 import pathlib
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
+# temp = pathlib.PosixPath
+# pathlib.PosixPath = pathlib.WindowsPath
 
 
 class ObjectDetection:
@@ -48,6 +48,9 @@ class ObjectDetection:
         results = self.model(frame)
      
         labels, cord = results.xyxyn[0][:, -1], results.xyxyn[0][:, :-1]
+        # for x, y in results.xyxyn:
+        #     print(x)
+        #     print(y)
         return labels, cord
 
 

@@ -11,9 +11,8 @@ import process
 import os
 import random
 import pathlib
+import platform
 
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
 
 class ImageProcessorApp(QMainWindow):
     def __init__(self):
@@ -72,7 +71,50 @@ class ImageProcessorApp(QMainWindow):
         app.quit()
 
     def realtime_detect(self):
-        pass
+        self.setWindowTitle('OpenCV Camera')
+        self.image_widget = QWidget()
+        self.stacked_widget.addWidget(self.image_widget)
+
+        layout = QVBoxLayout()
+            # detect = process.ObjectDetection()
+        frame = cv2.imread(file_path)
+        results = self.detect.score_frame(frame)
+        frame = self.detect.plot_boxes(results, frame)
+        convert = QImage(frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format.Format_BGR888)
+
+        original_pixmap = QPixmap(QPixmap.fromImage(convert))
+        processed_pixmap = self.process_image(original_pixmap)
+
+        image_label = QLabel()
+        image_label.setPixmap(processed_pixmap)
+        layout.addWidget(image_label)
+
+        go_back_button = QPushButton('Go Back', self)
+        go_back_button.clicked.connect(self.show_main_page)
+        layout.addWidget(go_back_button)
+
+        self.image_widget.setLayout(layout)
+        self.stacked_widget.setCurrentWidget(self.image_widget)
+
+
+        cap = cv2.VideoCapture(0)
+
+        while cap.isOpened():
+            
+            start_time = time.perf_counter()
+            ret, frame = cap.read()
+            if not ret:
+                break
+            results = self.score_frame(frame)
+            frame = self.plot_boxes(results, frame)
+            end_time = time.perf_counter()
+            fps = 1 / np.round(end_time - start_time, 3)
+            cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+            cv2.imshow("img", frame)
+
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
     def random_image(self):
         file_path = "images"
@@ -82,13 +124,27 @@ class ImageProcessorApp(QMainWindow):
         # file_path, _ = QFileDialog.getOpenFileName(self, 'Select Image', '', 'Image Files (*.png *.jpg *.jpeg *.bmp)', options=options)
 
         if file_path:
+        # self.stacked_widget = QStackedWidget()
+        # self.setCentralWidget(self.stacked_widget)
+
+        # self.main_widget = QWidget()
+        # self.stacked_widget.addWidget(self.main_widget)
+
+        # layout = QVBoxLayout()
+        # embedded_layout = QHBoxLayout()
+
             self.image_widget = QWidget()
             self.stacked_widget.addWidget(self.image_widget)
 
             layout = QVBoxLayout()
-            # detect = process.ObjectDetection()
             frame = cv2.imread(file_path)
             results = self.detect.score_frame(frame)
+            # print("-------------in main.py-----------------------")
+            # labels, cord = results.xyxyn[0][:, -1], results.xyxyn[0][:, :-1]
+            labels, cord = results
+            # print("-------------in main.py-----------------------")
+            # labels, cord = results
+
             frame = self.detect.plot_boxes(results, frame)
             convert = QImage(frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format.Format_BGR888)
 
@@ -97,14 +153,78 @@ class ImageProcessorApp(QMainWindow):
 
             image_label = QLabel()
             image_label.setPixmap(processed_pixmap)
-            layout.addWidget(image_label)
+
 
             go_back_button = QPushButton('Go Back', self)
             go_back_button.clicked.connect(self.show_main_page)
+
+            layout.addWidget(image_label)
             layout.addWidget(go_back_button)
+
+            labels, cord = results
+            print("-------------------------------------------")
+            n = len(labels)
+            print("length: " + str(n))
+            if n == 0:
+                return
+            elif n > 1:
+                labels = labels[0]
+            classs = self.detect.class_to_label(labels)
+            print("-------------------------------------------")
+            print(cord)
+            print("-------------------------------------------")
+
+            # x_shape, y_shape = frame.shape[1], frame.shape[0]
+            # # for i in range(n):
+            # # row = cord
+            # #     if row[4] >= 0.2:
+            # print(x_shape)
+            # x1 = int(cord[0])
+            # # x1, y1, x2, y2 = int(cord[0]*x_shape), int(cord[1]*y_shape), int(cord[2]*x_shape), int(cord[3]*y_shape)
+            # #         # bgr = (0, 255, 0)
+            print("---------------")
+            layout1 = QHBoxLayout()
+            label1 = QLabel(classs)
+            label1_text = QLabel("Class: ")
+            # print(labels)
+            print("---------------")
+            layout2 = QHBoxLayout()
+            label2_x1 = QLabel("x1")
+            label2_y1 = QLabel("y1")
+            label2_x2 = QLabel("x2")
+            label2_y2 = QLabel("y2")
+            # label2_x1 = QLabel(str( x1 ))
+            # label2_y1 = QLabel(str( y1 ))
+            # label2_x2 = QLabel(str( x2 ))
+            # label2_y2 = QLabel(str( y2 ))
+            label2_text = QLabel("Cord: ")
+            label2_x1_text = QLabel("x1")
+            label2_y1_text = QLabel("y1")
+            label2_x2_text = QLabel("x2")
+            label2_y2_text = QLabel("y2")
+            # cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
+            # print(cord)
+
+            # frame = self.detect.plot_boxes(results, frame)
 
             self.image_widget.setLayout(layout)
             self.stacked_widget.setCurrentWidget(self.image_widget)
+
+            layout1.addWidget(label1_text)
+            layout1.addWidget(label1)
+
+            layout2.addWidget(label2_text)
+            layout2.addWidget(label2_x1_text)
+            layout2.addWidget(label2_x1)
+            layout2.addWidget(label2_y1_text)
+            layout2.addWidget(label2_y1)
+            layout2.addWidget(label2_x2_text)
+            layout2.addWidget(label2_x2)
+            layout2.addWidget(label2_y2_text)
+            layout2.addWidget(label2_y2)
+
+            layout.addLayout(layout1)
+            layout.addLayout(layout2)
 
     def upload_image(self):
         options = QFileDialog.Options()
@@ -159,6 +279,10 @@ class ImageProcessorApp(QMainWindow):
         self.stacked_widget.setCurrentWidget(self.main_widget)
 
 if __name__ == '__main__':
+    if platform.system() == 'Windows':
+        temp = pathlib.PosixPath
+        pathlib.PosixPath = pathlib.WindowsPath
+
     app = QApplication(sys.argv)
     # app.setStyleSheet(open('styles.css').read())
     window = ImageProcessorApp()
