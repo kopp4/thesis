@@ -33,6 +33,7 @@ class ObjectDetection:
         :return: Trained Pytorch model.
         """
         # model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+        # model = torch.hub.load('ultralytics/yolov5', 'custom', path='cub.pt') 
         model = torch.hub.load('ultralytics/yolov5', 'custom', path='cub.pt') 
         return model
 

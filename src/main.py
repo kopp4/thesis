@@ -172,9 +172,9 @@ class ImageProcessorApp(QMainWindow):
             print("y_shape: " + str(y_shape))
 
             x1 = int(cord[0][0].item()*x_shape)
-            y1 = int(cord[0][1].item()*x_shape)
+            y1 = int(cord[0][1].item()*y_shape)
             x2 = int(cord[0][2].item()*x_shape)
-            y2 = int(cord[0][3].item()*x_shape)
+            y2 = int(cord[0][3].item()*y_shape)
             precision = cord[0][4].item()
 
             print("---------------")
@@ -273,9 +273,9 @@ class ImageProcessorApp(QMainWindow):
             # x1 = int(cord[0])
             # x1, y1, x2, y2 = int(cord[0]*x_shape), int(cord[1]*y_shape), int(cord[2]*x_shape), int(cord[3]*y_shape)
             x1 = int(cord[0][0].item()*x_shape)
-            y1 = int(cord[0][1].item()*x_shape)
+            y1 = int(cord[0][1].item()*y_shape)
             x2 = int(cord[0][2].item()*x_shape)
-            y2 = int(cord[0][3].item()*x_shape)
+            y2 = int(cord[0][3].item()*y_shape)
             precision = cord[0][4].item()
             # #         # bgr = (0, 255, 0)
             print("---------------")
