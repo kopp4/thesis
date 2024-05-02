@@ -13,6 +13,8 @@ import random
 import pathlib
 import platform
 
+import time
+import numpy as np
 
 class ImageProcessorApp(QMainWindow):
     def __init__(self):
@@ -71,31 +73,6 @@ class ImageProcessorApp(QMainWindow):
         app.quit()
 
     def realtime_detect(self):
-        self.setWindowTitle('OpenCV Camera')
-        self.image_widget = QWidget()
-        self.stacked_widget.addWidget(self.image_widget)
-
-        layout = QVBoxLayout()
-            # detect = process.ObjectDetection()
-        frame = cv2.imread(file_path)
-        results = self.detect.score_frame(frame)
-        frame = self.detect.plot_boxes(results, frame)
-        convert = QImage(frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format.Format_BGR888)
-
-        original_pixmap = QPixmap(QPixmap.fromImage(convert))
-        processed_pixmap = self.process_image(original_pixmap)
-
-        image_label = QLabel()
-        image_label.setPixmap(processed_pixmap)
-        layout.addWidget(image_label)
-
-        go_back_button = QPushButton('Go Back', self)
-        go_back_button.clicked.connect(self.show_main_page)
-        layout.addWidget(go_back_button)
-
-        self.image_widget.setLayout(layout)
-        self.stacked_widget.setCurrentWidget(self.image_widget)
-
 
         cap = cv2.VideoCapture(0)
 
@@ -105,16 +82,84 @@ class ImageProcessorApp(QMainWindow):
             ret, frame = cap.read()
             if not ret:
                 break
-            results = self.score_frame(frame)
-            frame = self.plot_boxes(results, frame)
+            results = self.detect.score_frame(frame)
+            frame = self.detect.plot_boxes(results, frame)
             end_time = time.perf_counter()
             fps = 1 / np.round(end_time - start_time, 3)
             cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
             cv2.imshow("img", frame)
 
-
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+        return 
+
+
+        # ---------------------------------
+        # self.setWindowTitle('OpenCV Camera')
+        # self.image_widget = QWidget()
+        # self.stacked_widget.addWidget(self.image_widget)
+
+        # layout = QVBoxLayout()
+        #     # detect = process.ObjectDetection()
+        # # frame = cv2.imread(file_path)
+        # # results = self.detect.score_frame(frame)
+        # # frame = self.detect.plot_boxes(results, frame)
+        # # convert = QImage(frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format.Format_BGR888)
+
+        # # original_pixmap = QPixmap(QPixmap.fromImage(convert))
+        # # processed_pixmap = self.process_image(original_pixmap)
+
+        # # image_label = QLabel()
+        # # image_label.setPixmap(processed_pixmap)
+        # # layout.addWidget(image_label)
+
+        # # go_back_button = QPushButton('Go Back', self)
+        # # go_back_button.clicked.connect(self.show_main_page)
+        # # layout.addWidget(go_back_button)
+
+        # # self.image_widget.setLayout(layout)
+        # # self.stacked_widget.setCurrentWidget(self.image_widget)
+
+
+        # cap = cv2.VideoCapture(0)
+
+        # while cap.isOpened():
+            
+        #     start_time = time.perf_counter()
+        #     ret, frame = cap.read()
+        #     if not ret:
+        #         break
+        #     results = self.detect.score_frame(frame)
+        #     frame = self.detect.plot_boxes(results, frame)
+        #     end_time = time.perf_counter()
+        #     fps = 1 / np.round(end_time - start_time, 3)
+        #     cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+        #     # cv2.imshow("img", frame)
+
+        #     '''
+        #     bro
+        #     '''
+        #     convert = QImage(frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format.Format_BGR888)
+
+        #     original_pixmap = QPixmap(QPixmap.fromImage(convert))
+        #     processed_pixmap = self.process_image(original_pixmap)
+
+        #     image_label = QLabel()
+        #     image_label.setPixmap(processed_pixmap)
+        #     layout.addWidget(image_label)
+
+
+        #     go_back_button = QPushButton('Go Back', self)
+        #     go_back_button.clicked.connect(self.show_main_page)
+
+        #     layout.addWidget(image_label)
+        #     layout.addWidget(go_back_button)
+
+        #     '''
+        #     bro
+        #     '''
+        #     # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #         # break
 
     def random_image(self):
         file_path = "images"

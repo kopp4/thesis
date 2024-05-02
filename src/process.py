@@ -22,6 +22,7 @@ class ObjectDetection:
         """
         self.model = self.load_model()
         self.classes = self.model.names
+        print(self.classes)
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("\n\nDevice Used:",self.device)
 
@@ -34,7 +35,8 @@ class ObjectDetection:
         """
         # model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
         # model = torch.hub.load('ultralytics/yolov5', 'custom', path='cub.pt') 
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path='cub.pt') 
+        # model = torch.hub.load('ultralytics/yolov5', 'custom', path='cub.pt', force_reload=True) 
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path='cub.pt')
         return model
 
 
